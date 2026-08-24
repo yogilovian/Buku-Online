@@ -304,8 +304,8 @@
                         <div class="book-info">
                             <h3 class="book-title" title="${buku.title}">${buku.title}</h3>
                             <p class="book-author">${buku.author}</p>
-                            <a href="javascript:void(0)" onclick="openBook('${buku.link}')" class="btn-view">Baca Buku</a>
-
+                            // Mengarahkan ke halaman baca.html sambil mengirimkan lokasi file PDF-nya
+                            <a href="baca.html?file=${buku.link}" class="class="btn-view"">Baca Buku</a>
                         </div>
                     `;
                     bookGrid.appendChild(card);
@@ -316,30 +316,9 @@
                 statusMessage.innerText = 'Terjadi kesalahan sistem saat mengambil data.';
             }
         });
-        window.openBook = function(pdfUrl) {
-            const modal = document.getElementById('bookModal');
-            const iframe = document.getElementById('modalFrame');
-    
-            if (modal && iframe) {
-                iframe.src = pdfUrl;
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Menghentikan scroll latar belakang
-            }
-        };
-
-        window.closeBook = function() {
-            const modal = document.getElementById('bookModal');
-            const iframe = document.getElementById('modalFrame');
-    
-            if (modal && iframe) {
-                modal.style.display = 'none';
-                iframe.src = ''; // Mengosongkan iframe agar suara/loading berhenti
-                document.body.style.overflow = 'auto'; // Mengaktifkan kembali scroll
-            }
-        };
     </script>
     !-- Struktur Pop-up Reader -->
-<div id="bookModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; align-items:center; justify-content:center;">
+<!-- <div id="bookModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; align-items:center; justify-content:center;">
     <div style="background:white; width:95%; max-width:1100px; height:90%; margin:2% auto; border-radius:12px; display:flex; flex-direction:column; overflow:hidden; position:relative;">
         <div style="padding:15px 20px; background:#f8fafc; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #e2e8f0;">
             <span style="font-weight:bold; color:#1e293b;">KAIBook Digital Reader</span>
@@ -347,6 +326,6 @@
         </div>
         <iframe id="modalFrame" style="width:100%; flex-grow:1; border:none;" src=""></iframe>
     </div>
-</div>
+</div> -->
 </body>
 </html>
