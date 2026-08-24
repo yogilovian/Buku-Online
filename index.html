@@ -231,83 +231,74 @@
 <body>
 
     <!-- Navigasi Utama -->
-    <header>
+    <<header>
         <nav class="navbar">
             <a href="#" class="logo">📖 KAIBook</a>
             <form class="search-form" id="searchForm">
-                <input type="text" class="search-input" id="queryInput" placeholder="Ketik judul buku, contoh: 'Bumi Manusia'..." required>
+                <input type="text" class="search-input" id="queryInput" placeholder="Ketik judul buku, contoh: 'Peraturan Dinas'..." required>
                 <button type="submit" class="search-btn">Cari</button>
             </form>
         </nav>
     </header>
 
-    <!-- Tempat Menampilkan Hasil Pencarian -->
     <main class="container">
-        <div id="statusMessage" class="status-message">Silakan ketik judul buku di atas untuk mencari koleksi digital...</div>
+        <div id="statusMessage" class="status-message">Silakan ketik judul buku di atas untuk mencari...</div>
         <div class="book-grid" id="bookGrid"></div>
     </main>
 
-    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Yogi Lovian Copyright.</p>
+        <p>&copy; 2026 KAIBook Digital Library.</p>
     </footer>
 
-    <!-- Logika JavaScript untuk Integrasi API dan Untuk ke Buku.json-->
     <script>
-    document.getElementById('searchForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const query = document.getElementById('queryInput').value.toLowerCase();
-        const bookGrid = document.getElementById('bookGrid');
-        const statusMessage = document.getElementById('statusMessage');
+        document.getElementById('searchForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const query = document.getElementById('queryInput').value.trim().toLowerCase();
+            const bookGrid = document.getElementById('bookGrid');
+            const statusMessage = document.getElementById('statusMessage');
 
-        bookGrid.innerHTML = '';
-        statusMessage.style.display = 'block';
-        statusMessage.innerText = 'Sedang mencari buku...';
+            // Reset komponen UI
+            bookGrid.innerHTML = '';
+            statusMessage.style.display = 'block';
+            statusMessage.innerText = 'Sedang mencari buku...';
 
-        // 1. Ambil data dari buku PDF lokal Anda (buku.json)
-        fetch('Buku.json')
-            .then(res => res.json())
-            .then(lokalBuku => {
-                // Filter buku lokal yang cocok dengan judul atau penulis
-                const hasilLokal = lokalBuku.filter(buku => 
-                    buku.judul.toLowerCase().includes(query) || 
-                    buku.penulis.toLowerCase().includes(query)
-                );
+            // Langkah 1: Ambil data dari lokal (buku.json) dengan proteksi anti-crash
+            try {
+                const res = await fetch('Buku.json');
+                if (res.ok) {
+                    const lokalBuku = await res.json();
+                    const hasilLokal = lokalBuku.filter(buku => 
+                        buku.judul.toLowerCase().includes(query) || 
+                        buku.penulis.toLowerCase().includes(query)
+                    );
 
-                // Tampilkan buku lokal terlebih dahulu (jika ada)
-                hasilLokal.forEach(buku => {
-                    const cardHTML = `
-                        <div class="book-card" style="border: 2px solid var(--primary);">
-                            <div class="cover-wrapper">
-                                <img src="${buku.cover}" alt="${buku.judul}" class="book-cover">
-                            </div>
-                            <div class="book-info">
-                                <span style="color: var(--primary); font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">📄 KOLEKSI PDF</span>
-                                <h3 class="book-title" title="${buku.judul}">${buku.judul}</h3>
-                                <p class="book-author">${buku.penulis}</p>
-                                <a href="${buku.file_pdf}" target="_blank" class="btn-view" style="background-color: var(--primary); color: white;">Buka / Baca PDF</a>
-                            </div>
-                        </div>
-                    `;
-                    bookGrid.innerHTML += cardHTML;
-                });
+                    hasilLokal.forEach(buku => {
+                        bookGrid.innerHTML += `
+                            <div class="book-card" style="border: 2px solid var(--primary);">
+                                <div class="cover-wrapper"><img src="${buku.cover}" class="book-cover"></div>
+                                <div class="book-info">
+                                    <span style="color: var(--primary); font-size: 0.75rem; font-weight: bold; margin-bottom: 4px;">📄 KOLEKSI PDF</span>
+                                    <h3 class="book-title">${buku.judul}</h3>
+                                    <p class="book-author">${buku.penulis}</p>
+                                    <a href="${buku.file_pdf}" target="_blank" class="btn-view" style="background-color: var(--primary); color: white;">Buka PDF</a>
+                                </div>
+                            </div>`;
+                    });
+                }
+            } catch (err) {
+                // Diabaikan: Jika file tidak ditemukan atau dibuka via file:/// aplikasi tidak akan macet
+                console.log("Aplikasi berjalan dalam mode cloud (File indeks lokal dilewati).");
+            }
 
-                // 2. Lanjutkan mencari ke Google Books API untuk melengkapi hasil
-                return fetch(`https://googleapis.com{encodeURIComponent(query)}&maxResults=8`);
-            })
-            .then(response => response.json())
-            .then(data => {
+            // Langkah 2: Ambil data dari Google Books API global
+            try {
+                const response = await fetch(`https://googleapis.com{encodeURIComponent(query)}&maxResults=8`);
+                if (!response.ok) throw new Error("API Google bermasalah");
+                
+                const data = await response.json();
                 statusMessage.style.display = 'none';
 
-                // Jika di lokal tidak ada dan di google api juga kosong
-                if (bookGrid.children.length === 0 && (!data.items || data.items.length === 0)) {
-                    statusMessage.style.display = 'block';
-                    statusMessage.innerText = 'Buku tidak ditemukan di koleksi PDF maupun internet.';
-                    return;
-                }
-
-                // Tampilkan hasil dari Google Books jika ada
                 if (data.items) {
                     data.items.forEach(item => {
                         const volumeInfo = item.volumeInfo;
@@ -316,31 +307,19 @@
                         const authors = volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Penulis Anonim';
                         const previewLink = volumeInfo.previewLink || '#';
 
-                        const cardHTML = `
+                        bookGrid.innerHTML += `
                             <div class="book-card">
-                                <div class="cover-wrapper">
-                                    <img src="${coverImg}" alt="${title}" class="book-cover">
-                                </div>
+                                <div class="cover-wrapper"><img src="${coverImg}" class="book-cover"></div>
                                 <div class="book-info">
-                                    <h3 class="book-title" title="${title}">${title}</h3>
+                                    <h3 class="book-title">${title}</h3>
                                     <p class="book-author">${authors}</p>
-                                    <a href="${previewLink}" target="_blank" class="btn-view">Baca Detail / Preview</a>
+                                    <a href="${previewLink}" target="_blank" class="btn-view">Preview</a>
                                 </div>
-                            </div>
-                        `;
-                        bookGrid.innerHTML += cardHTML;
+                            </div>`;
                     });
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                if(bookGrid.children.length === 0) {
-                    statusMessage.style.display = 'block';
-                    statusMessage.innerText = 'Terjadi kesalahan koneksi.';
-                } else {
-                    statusMessage.style.display = 'none';
-                }
-            });
-    });
+            } catch (error) {
+                console.error('Error Sistem:', error);
+            }
 </script>
 </body>
