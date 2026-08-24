@@ -6,35 +6,36 @@
     <title>KAI Book - Aplikasi Buku Online KAI</title>
     <style>
         
-        /* --- VARIABEL & RESET CSS --- */
-        :root {
-            --primary-color: #4f46e5;
-            --primary-hover: #4338ca;
-            --background: #f8fafc;
+       :root {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --dark: #1e293b;
+            --light: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-            --radius: 12px;
+            --text-main: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background-color: var(--background);
-            color: var(--text-main);
-            line-height: 1.6;
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
         /* --- HEADER & NAVIGASI --- */
         header {
             background-color: var(--card-bg);
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-bottom: 1px solid #e2e8f0;
             position: sticky;
             top: 0;
             z-index: 100;
@@ -51,122 +52,115 @@
 
         .logo {
             font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--primary-color);
+            font-weight: 800;
+            color: var(--primary);
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .search-bar {
-            padding: 0.6rem 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 50px;
-            width: 300px;
-            font-size: 0.9rem;
-            outline: none;
-            transition: all 0.3s ease;
+        /* --- FORM PENCARIAN API --- */
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 500px;
         }
 
-        .search-bar:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
-        }
-
-        /* --- UTAMA (HERO SECTION) --- */
-        .hero {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
+        .search-input {
+            flex-grow: 1;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid #e2e8f0;
             border-radius: var(--radius);
-            text-align: center;
-            box-shadow: var(--shadow);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
         }
 
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
         }
 
-        .hero p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
+        .search-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
         }
 
-        /* --- KATALOG BUKU --- */
+        .search-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* --- MAIN KONTEN --- */
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex-grow: 1;
+            width: 100%;
         }
 
-        .section-title {
-            font-size: 1.75rem;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
-            position: relative;
-            padding-bottom: 0.5rem;
+        .status-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-top: 4rem;
         }
 
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 4px;
-            background-color: var(--primary-color);
-            border-radius: 2px;
-        }
-
+        /* --- GRID BUKU HASIL API --- */
         .book-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2.5rem;
         }
 
         .book-card {
-            background-color: var(--card-bg);
+            background: var(--card-bg);
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
+            border: 1px solid #f1f5f9;
             display: flex;
             flex-direction: column;
-            border: 1px solid #f1f5f9;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .book-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             box-shadow: var(--shadow);
         }
 
-        .book-cover {
-            width: 100%;
-            height: 280px;
-            background-color: #cbd5e1;
+        .cover-wrapper {
+            background-color: #f1f5f9;
+            height: 320px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #64748b;
-            font-weight: bold;
-            position: relative;
             overflow: hidden;
+            position: relative;
         }
 
-        /* Placeholder warna-warni untuk cover buku jika tidak ada gambar */
-        .cover-1 { background: linear-gradient(45deg, #ff9a9e, #fecfef); }
-        .cover-2 { background: linear-gradient(45deg, #a1c4fd, #c2e9fb); }
-        .cover-3 { background: linear-gradient(45deg, #f6d365, #fda085); }
-        .cover-4 { background: linear-gradient(45deg, #d4fc79, #96e6a1); }
+        .book-cover {
+            height: 85%;
+            object-fit: cover;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            transition: transform 0.3s;
+        }
+
+        .book-card:hover .book-cover {
+            transform: scale(1.05);
+        }
 
         .book-info {
-            padding: 1.25rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             flex-grow: 1;
@@ -174,58 +168,62 @@
 
         .book-title {
             font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            color: var(--text-main);
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3.1rem;
+        }
+
+        .book-author {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 1rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
 
-        .book-author {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            margin-bottom: 1rem;
-        }
-
-        .btn-read {
+        .btn-view {
             margin-top: auto;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: #f1f5f9;
+            color: var(--dark);
             text-align: center;
-            padding: 0.6rem;
-            border-radius: 8px;
+            padding: 0.75rem;
+            border-radius: 10px;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             font-size: 0.9rem;
-            transition: background 0.2s ease;
+            transition: all 0.2s;
         }
 
-        .btn-read:hover {
-            background-color: var(--primary-hover);
+        .btn-view:hover {
+            background-color: var(--primary);
+            color: white;
         }
 
         /* --- FOOTER --- */
         footer {
-            background-color: #0f172a;
+            background-color: var(--dark);
             color: #94a3b8;
             text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
+            padding: 1.5rem;
             font-size: 0.9rem;
+            border-top: 1px solid #334155;
         }
 
         /* --- RESPONSIVITAS --- */
         @media (max-width: 768px) {
             .navbar {
                 flex-direction: column;
-                gap: 1rem;
+                gap: 1.25rem;
             }
-            .search-bar {
-                width: 100%;
-            }
-            .hero h1 {
-                font-size: 2rem;
+            .search-form {
+                max-width: 100%;
             }
         }
     </style>
