@@ -252,37 +252,65 @@
         <p>&copy; 2026 Yogi Lovian Copyright.</p>
     </footer>
 
-    <!-- Logika JavaScript untuk Integrasi API -->
+    <!-- Logika JavaScript untuk Integrasi API dan Untuk ke Buku.json-->
     <script>
-        document.getElementById('searchForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const query = document.getElementById('queryInput').value;
-            const bookGrid = document.getElementById('bookGrid');
-            const statusMessage = document.getElementById('statusMessage');
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const query = document.getElementById('queryInput').value.toLowerCase();
+        const bookGrid = document.getElementById('bookGrid');
+        const statusMessage = document.getElementById('statusMessage');
 
-            // Reset tampilan dan beri efek loading
-            bookGrid.innerHTML = '';
-            statusMessage.style.display = 'block';
-            statusMessage.innerText = 'Sedang mencari buku terbaik untuk Anda...';
+        bookGrid.innerHTML = '';
+        statusMessage.style.display = 'block';
+        statusMessage.innerText = 'Sedang mencari buku...';
 
-            // Panggil API Buku Publik (Google Books)
-            fetch(`https://googleapis.com{encodeURIComponent(query)}&maxResults=12`)
-                .then(response => response.json())
-                .then(data => {
-                    statusMessage.style.display = 'none';
+        // 1. Ambil data dari buku PDF lokal Anda (buku.json)
+        fetch('buku.json')
+            .then(res => res.json())
+            .then(lokalBuku => {
+                // Filter buku lokal yang cocok dengan judul atau penulis
+                const hasilLokal = lokalBuku.filter(buku => 
+                    buku.judul.toLowerCase().includes(query) || 
+                    buku.penulis.toLowerCase().includes(query)
+                );
 
-                    if (!data.items || data.items.length === 0) {
-                        statusMessage.style.display = 'block';
-                        statusMessage.innerText = 'Buku tidak ditemukan. Coba kata kunci lain.';
-                        return;
-                    }
+                // Tampilkan buku lokal terlebih dahulu (jika ada)
+                hasilLokal.forEach(buku => {
+                    const cardHTML = `
+                        <div class="book-card" style="border: 2px solid var(--primary);">
+                            <div class="cover-wrapper">
+                                <img src="${buku.cover}" alt="${buku.judul}" class="book-cover">
+                            </div>
+                            <div class="book-info">
+                                <span style="color: var(--primary); font-size: 0.75rem; font-weight: bold; margin-bottom: 5px;">📄 KOLEKSI PDF</span>
+                                <h3 class="book-title" title="${buku.judul}">${buku.judul}</h3>
+                                <p class="book-author">${buku.penulis}</p>
+                                <a href="${buku.file_pdf}" target="_blank" class="btn-view" style="background-color: var(--primary); color: white;">Buka / Baca PDF</a>
+                            </div>
+                        </div>
+                    `;
+                    bookGrid.innerHTML += cardHTML;
+                });
 
-                    // Render buku dari internet ke HTML
+                // 2. Lanjutkan mencari ke Google Books API untuk melengkapi hasil
+                return fetch(`https://googleapis.com{encodeURIComponent(query)}&maxResults=8`);
+            })
+            .then(response => response.json())
+            .then(data => {
+                statusMessage.style.display = 'none';
+
+                // Jika di lokal tidak ada dan di google api juga kosong
+                if (bookGrid.children.length === 0 && (!data.items || data.items.length === 0)) {
+                    statusMessage.style.display = 'block';
+                    statusMessage.innerText = 'Buku tidak ditemukan di koleksi PDF maupun internet.';
+                    return;
+                }
+
+                // Tampilkan hasil dari Google Books jika ada
+                if (data.items) {
                     data.items.forEach(item => {
                         const volumeInfo = item.volumeInfo;
-                        
-                        // Cek kelengkapan gambar cover, jika tidak ada pakai gambar kosong bawaan
                         const coverImg = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : 'https://unsplash.com';
                         const title = volumeInfo.title || 'Judul Tidak Tersedia';
                         const authors = volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Penulis Anonim';
@@ -302,12 +330,17 @@
                         `;
                         bookGrid.innerHTML += cardHTML;
                     });
-                })
-                .catch(error => {
-                    console.error('Error:', error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                if(bookGrid.children.length === 0) {
                     statusMessage.style.display = 'block';
-                    statusMessage.innerText = 'Terjadi kesalahan koneksi. Silakan coba lagi.';
-                });
-        });
-    </script>
+                    statusMessage.innerText = 'Terjadi kesalahan koneksi.';
+                } else {
+                    statusMessage.style.display = 'none';
+                }
+            });
+    });
+</script>
 </body>
