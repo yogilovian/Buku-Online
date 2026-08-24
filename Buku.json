@@ -1,1 +1,17 @@
+[
+  {
+    "id": "buku001",
+    "judul": "KL.104_I_DO.9_2024i",
+    "deskripsi": "InstruksiKeselamatanPelayananPerjalananKeretaapi di Wilayah Daop 9 Jember.",
+    "cover": "cover/laskar-pelangi.jpg",
+    "file_pdf": "Bank_Buku/KL.104_I_DO.9_2024i.pdf"
+  },
+  {
+    "id": "buku002",
+    "judul": "Peraturan Dinas 19 Jilid I",
+    "deskripsi": "Tentang Urusan Perka & Langsir.",
+    "cover": "cover/filosofi-teras.jpg",
+    "file_pdf": "Bank_Buku/PD 19 Jilid I Urusan Perka & Langsir.pdf"
+  }
+]
 
