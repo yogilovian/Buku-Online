@@ -293,12 +293,12 @@
                     hasilLokal.forEach(buku => {
                         bookGrid.innerHTML += `
                             <div class="book-card" style="border: 2px solid var(--primary);">
-                                <div class="cover-wrapper"><img src="${buku.cover}" class="book-cover"></div>
+                                <div class="cover-wrapper"><img src="${gambar/buku.cover}" class="book-cover"></div>
                                 <div class="book-info">
                                     <span style="color: var(--primary); font-size: 0.75rem; font-weight: bold; margin-bottom: 4px;">📄 KOLEKSI PDF</span>
-                                    <h3 class="book-title">${buku.judul}</h3>
-                                    <p class="book-author">${buku.penulis}</p>
-                                    <a href="${buku.file_pdf}" target="_blank" class="btn-view" style="background-color: var(--primary); color: white;">Buka PDF</a>
+                                    <h3 class="book-title">${Bank_Buku.judul}</h3>
+                                    <p class="book-author">${Bank_Buku.penulis}</p>
+                                    <a href="${Bank_Buku.file_pdf}" target="_blank" class="btn-view" style="background-color: var(--primary); color: white;">Buka PDF</a>
                                 </div>
                             </div>`;
                     });
