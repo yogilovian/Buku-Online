@@ -316,6 +316,27 @@
                 statusMessage.innerText = 'Terjadi kesalahan sistem saat mengambil data.';
             }
         });
+        window.openBook = function(pdfUrl) {
+            const modal = document.getElementById('bookModal');
+            const iframe = document.getElementById('modalFrame');
+    
+            if (modal && iframe) {
+                iframe.src = pdfUrl;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Menghentikan scroll latar belakang
+            }
+        };
+
+        window.closeBook = function() {
+            const modal = document.getElementById('bookModal');
+            const iframe = document.getElementById('modalFrame');
+    
+            if (modal && iframe) {
+                modal.style.display = 'none';
+                iframe.src = ''; // Mengosongkan iframe agar suara/loading berhenti
+                document.body.style.overflow = 'auto'; // Mengaktifkan kembali scroll
+            }
+        };
     </script>
 </body>
 </html>
