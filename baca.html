@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membaca Buku - KAI Book</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; height: 100%; overflow: hidden;
+            font-family: system-ui, -apple-system, sans-serif; background: #1e293b;
+        }
+        .reader-header {
+            background: #ffffff; padding: 10px 20px; display: flex;
+            align-items: center; justify-content: space-between; border-bottom: 1px solid #e2e8f0;
+        }
+        .btn-back {
+            background: #2563eb; color: white; text-decoration: none;
+            padding: 8px 16px; border-radius: 8px; font-weight: bold; font-size: 0.9rem;
+        }
+        .btn-back:hover { background: #F26924; }
+        .pdf-viewer {
+            width: 100%; height: calc(100vh - 60px); border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="reader-header">
+        <a href="index.html" class="btn-back">⬅ Kembali ke KAIBook</a>
+        <span style="font-weight: bold; color: #1e293b;">KAI BOOK READER</span>
+    </div>
+
+    <!-- Tempat menampilkan PDF buku -->
+    <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
+
+    <script>
+        // Mengambil parameter URL file PDF (contoh: baca.html?file=pdf/pd3a.pdf)
+        const urlParams = new URLSearchParams(window.location.search);
+        const pdfFile = urlParams.get('file');
+        
+        if (pdfFile) {
+            document.getElementById('pdfFrame').src = pdfFile;
+        } else {
+            alert('File buku tidak ditemukan!');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>
