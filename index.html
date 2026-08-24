@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitBook - Aplikasi Buku Online Dunia</title>
+    <style>
+        /* --- VARIABEL & RESET --- */
+        :root {
+            --primary: #059669;
+            --primary-hover: #047857;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- HEADER & NAVIGASI --- */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid #e2e8f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* --- FORM PENCARIAN API --- */
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .search-input {
+            flex-grow: 1;
+            padding: 0.75rem 1.25rem;
+            border: 2px solid #e2e8f0;
+            border-radius: var(--radius);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
+        }
+
+        .search-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        /* --- MAIN KONTEN --- */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .status-message {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-top: 4rem;
+        }
+
+        /* --- GRID BUKU HASIL API --- */
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .book-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1f5f9;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .book-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow);
+        }
+
+        .cover-wrapper {
+            background-color: #f1f5f9;
+            height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .book-cover {
+            height: 85%;
+            object-fit: cover;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            border-radius: 4px;
+            transition: transform 0.3s;
+        }
+
+        .book-card:hover .book-cover {
+            transform: scale(1.05);
+        }
+
+        .book-info {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .book-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3.1rem;
+        }
+
+        .book-author {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .btn-view {
+            margin-top: auto;
+            background-color: #f1f5f9;
+            color: var(--dark);
+            text-align: center;
+            padding: 0.75rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .btn-view:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: var(--dark);
+            color: #94a3b8;
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.9rem;
+            border-top: 1px solid #334155;
+        }
+
+        /* --- RESPONSIVITAS --- */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1.25rem;
+            }
+            .search-form {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigasi Utama -->
+    <header>
+        <nav class="navbar">
+            <a href="#" class="logo">📖 GitBook</a>
+            <form class="search-form" id="searchForm">
+                <input type="text" class="search-input" id="queryInput" placeholder="Ketik judul buku, contoh: 'Bumi Manusia'..." required>
+                <button type="submit" class="search-btn">Cari</button>
+            </form>
+        </nav>
+    </header>
+
+    <!-- Tempat Menampilkan Hasil Pencarian -->
+    <main class="container">
+        <div id="statusMessage" class="status-message">Silakan ketik judul buku di atas untuk mencari koleksi digital...</div>
+        <div class="book-grid" id="bookGrid"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 GitBook Open Source Project. Didukung oleh Google Books API.</p>
+    </footer>
+
+    <!-- Logika JavaScript untuk Integrasi API -->
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const query = document.getElementById('queryInput').value;
+            const bookGrid = document.getElementById('bookGrid');
+            const statusMessage = document.getElementById('statusMessage');
+
+            // Reset tampilan dan beri efek loading
+            bookGrid.innerHTML = '';
+            statusMessage.style.display = 'block';
+            statusMessage.innerText = 'Sedang mencari buku terbaik untuk Anda...';
+
+            // Panggil API Buku Publik (Google Books)
+            fetch(`https://googleapis.com{encodeURIComponent(query)}&maxResults=12`)
+                .then(response => response.json())
+                .then(data => {
+                    statusMessage.style.display = 'none';
+
+                    if (!data.items || data.items.length === 0) {
+                        statusMessage.style.display = 'block';
+                        statusMessage.innerText = 'Buku tidak ditemukan. Coba kata kunci lain.';
+                        return;
+                    }
+
+                    // Render buku dari internet ke HTML
+                    data.items.forEach(item => {
+                        const volumeInfo = item.volumeInfo;
+                        
+                        // Cek kelengkapan gambar cover, jika tidak ada pakai gambar kosong bawaan
+                        const coverImg = volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : 'https://unsplash.com';
+                        const title = volumeInfo.title || 'Judul Tidak Tersedia';
+                        const authors = volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Penulis Anonim';
+                        const previewLink = volumeInfo.previewLink || '#';
+
+                        const cardHTML = `
+                            <div class="book-card">
+                                <div class="cover-wrapper">
+                                    <img src="${coverImg}" alt="${title}" class="book-cover">
+                                </div>
+                                <div class="book-info">
+                                    <h3 class="book-title" title="${title}">${title}</h3>
+                                    <p class="book-author">${authors}</p>
+                                    <a href="${previewLink}" target="_blank" class="btn-view">Baca Detail / Preview</a>
+                                </div>
+                            </div>
+                        `;
+                        bookGrid.innerHTML += cardHTML;
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    statusMessage.style.display = 'block';
+                    statusMessage.innerText = 'Terjadi kesalahan koneksi. Silakan coba lagi.';
+                });
+        });
+    </script>
+</body>
