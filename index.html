@@ -59,14 +59,19 @@
             align-items: center;
             gap: 0.5rem;
         } */
-        logo {
+        .logo {
+            display: flex;             /* Mengatur elemen di dalamnya jadi sejajar */
+            align-items: center;      /* Menyejajarkan logo dan teks tepat di tengah secara vertikal */
+            gap: 10px;                /* Memberi jarak antara gambar logo dan tulisan */
+            text-decoration: none;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .logo-img {
+            height: 40px;             /* Sesuaikan tinggi logo agar pas dengan teks */
+            width: auto;              /* Biarkan lebar menyesuaikan proporsi gambar */
             display: block;
-            width: 150px; /* Sesuaikan dengan lebar gambar Anda */
-            height: 50px; /* Sesuaikan dengan tinggi gambar Anda */
-            background: url('logo kai.png') no-repeat center;
-            background-size: contain;
-            text-indent: -9999px; /* Menyembunyikan tulisan "KAIBook" */
-            overflow: hidden;
         }
 
         /* --- FORM PENCARIAN API --- */
@@ -242,8 +247,10 @@
     <!-- Navigasi Utama -->
     <<header>
         <nav class="navbar">
-            <a href="#" class="logo">📖 KAIBook</a>
-            <img src="gambar/logo kai.png" alt="KAIBook Logo" style="height: 40px;">
+            <a href="#" class="logo">
+            <img src="gambar/logo kai.png" alt="Logo KAI" class="logo-img">
+            <span>KAIBook</span>
+            </a>
             <form class="search-form" id="searchForm">
                 <input type="text" class="search-input" id="queryInput" placeholder="Ketik judul buku, contoh: 'Peraturan Dinas'..." required>
                 <button type="submit" class="search-btn">Cari</button>
