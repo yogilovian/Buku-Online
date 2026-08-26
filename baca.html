@@ -21,17 +21,72 @@
         .pdf-viewer {
             width: 100%; height: calc(100vh - 60px); border: none;
         }
+        .reading-container {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: #ffffff;
+        z-index: 9999;
+        flex-direction: column;
+        opacity: 0;
+        transition: opacity 0.4s ease; /* Transisi halus */
+    }
+
+    .reading-container.aktif {
+        display: flex;
+        opacity: 1;
+    }
+
+    .reading-header {
+        background-color: #1e293b; /* Warna gelap var(--dark) */
+        padding: 0.75rem 2rem;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        border-bottom: 1px solid #334155;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+        .reading-title {
+        color: #f8fafc;
+        font-weight: 700;
+        font-size: 1.1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .reading-iframe {
+        width: 100%;
+        height: calc(100vh - 55px);
+        border: none;
+        background: #f1f5f9;
+    }
     </style>
 </head>
 <body>
 
-    <div class="reader-header">
+    <!-- <div class="reader-header">
         <a href="index.html" class="btn-back">⬅ Kembali</a>
-        <span style="font-weight: bold; color: #1e293b;">KAI BOOK READER</span>
+        <span style="font-weight: bold; color: #1e293b;">KAI BOOK READER</span> -->
     </div>
 
     <!-- Tempat menampilkan PDF buku -->
-    <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
+    <!-- <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe> -->
+
+    <!-- Area Membaca Layar Penuh -->
+<div id="readingArea" class="reading-container">
+    <div class="reading-header">
+        <button onclick="tutupBuku()" class="btn-back">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://w3.org"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Kembali ke Katalog
+        </button>
+        <span id="readingTitle" class="reading-title">Judul Buku</span>
+    </div>
+    <iframe id="readingFrame" src="" class="reading-iframe"></iframe>
+</div>
 
     <!-- Tambahkan Kontainer Membaca Ini di HTML Anda -->
 
