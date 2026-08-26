@@ -258,59 +258,55 @@
     </footer>
 
     <script>
-        document.getElementById('searchForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const query = document.getElementById('queryInput').value.trim().toLowerCase();
+                // Tentukan batas maksimal buku yang muncul di halaman utama (misal: 4 buku)
+        const BATAS_HALAMAN_UTAMA = 4;
+
+        async function muatBuku(kataKunci = '') {
             const bookGrid = document.getElementById('bookGrid');
             const statusMessage = document.getElementById('statusMessage');
 
-            // Reset komponen UI sebelum mencari
             bookGrid.innerHTML = '';
             statusMessage.style.display = 'block';
-            statusMessage.innerText = 'Sedang mencari buku...';
+            statusMessage.innerText = 'Sedang memuat data buku...';
 
             try {
-                // Mengambil data dari file buku.json lokal
                 const response = await fetch('buku.json');
-                if (!response.ok) {
-                    throw new Error('Gagal memuat data buku.');
-                }
+                if (!response.ok) throw new Error('Gagal memuat data buku.');
+                
                 const dataBuku = await response.json();
+                let hasilFilter = [];
 
-                // // Memfilter buku yang judul atau penulisnya cocok dengan keyword pencarian
-                // const hasilFilter = dataBuku.filter(buku => {
-                //     return buku.title.toLowerCase().includes(query) || 
-                //            buku.author.toLowerCase().includes(query);
-                // Jika kataKunci kosong, tampilkan semua buku. Jika ada, filter datanya.
-            const hasilFilter = kataKunci === '' 
-                ? dataBuku.slice(0, BATAS_HALAMAN_UTAMA) // Jika kosong, potong sesuai batas halaman utama
-                : dataBuku.filter(buku => 
-                    buku.title.toLowerCase().includes(kataKunci) || // Ditambahkan operator ||
-                    buku.author.toLowerCase().includes(kataKunci)
-                  );
+                if (kataKunci === '') {
+                    // Tampilkan koleksi terbatas di halaman utama (misal: 4 data pertama)
+                    hasilFilter = dataBuku.slice(0, BATAS_HALAMAN_UTAMA);
+                } else {
+                    // Jika user mencari sesuatu, cari di SELURUH data tanpa batasan slice
+                    hasilFilter = dataBuku.filter(buku => 
+                        buku.title.toLowerCase().includes(kataKunci) || 
+                        buku.author.toLowerCase().includes(kataKunci)
+                      );
+                }
 
-                // Cek jika tidak ada buku yang cocok
                 if (hasilFilter.length === 0) {
-                    statusMessage.innerText = `Buku dengan kata kunci "${query}" tidak ditemukan.`;
+                    statusMessage.innerText = 'Buku tidak ditemukan. Coba kata kunci lain.';
                     return;
                 }
 
-                // Sembunyikan pesan status jika buku ditemukan
                 statusMessage.style.display = 'none';
 
-                // Tampilkan data buku hasil pencarian ke dalam Grid HTML
                 hasilFilter.forEach(buku => {
                     const card = document.createElement('div');
                     card.className = 'book-card';
+                    const coverSrc = buku.cover || 'gambar/default-cover.png';
+
                     card.innerHTML = `
                         <div class="cover-wrapper">
-                            <img src="${buku.cover}" alt="${buku.title}" class="book-cover" onerror="this.src='https://placehold.co'">
+                            <img src="${coverSrc}" alt="Cover ${buku.title}" class="book-cover">
                         </div>
                         <div class="book-info">
                             <h3 class="book-title" title="${buku.title}">${buku.title}</h3>
-                            <p class="book-author">${buku.author}</p>
-                            <a href="baca.html?file=${buku.link}" class="btn-view">Baca Buku</a>
+                            <p class="book-author">Oleh: ${buku.author}</p>
+                            <a href="${buku.link || '#'}" class="btn-view" target="_blank">Baca Buku</a>
                         </div>
                     `;
                     bookGrid.appendChild(card);
@@ -318,9 +314,22 @@
 
             } catch (error) {
                 console.error(error);
-                statusMessage.innerText = 'Terjadi kesalahan sistem saat mengambil data.';
+                statusMessage.innerText = 'Terjadi kesalahan saat mengambil data buku.';
             }
+        }
+
+        // Jalankan otomatis saat halaman dibuka
+        document.addEventListener('DOMContentLoaded', () => {
+            muatBuku(); 
         });
+
+        // Fitur pencarian
+        document.getElementById('searchForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = document.getElementById('queryInput').value.trim().toLowerCase();
+            muatBuku(query);
+        });
+
         // Hapus fungsi openBook yang lama, ganti dengan ini:
         function openBook(pdfUrl) {
             var modal = document.getElementById('bookModal');
