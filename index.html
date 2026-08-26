@@ -330,28 +330,43 @@
             muatBuku(query);
         });
 
-        // Hapus fungsi openBook yang lama, ganti dengan ini:
-        function openBook(pdfUrl) {
-            var modal = document.getElementById('bookModal');
-            var iframe = document.getElementById('modalFrame');
+        // // Hapus fungsi openBook yang lama, ganti dengan ini:
+        // function openBook(pdfUrl) {
+        //     var modal = document.getElementById('bookModal');
+        //     var iframe = document.getElementById('modalFrame');
     
-            if (modal && iframe) {
-                iframe.src = pdfUrl;
-                modal.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-        }
+        //     if (modal && iframe) {
+        //         iframe.src = pdfUrl;
+        //         modal.style.display = 'block';
+        //         document.body.style.overflow = 'hidden';
+        //     }
+        // }
 
-        function closeBook() {
-            var modal = document.getElementById('bookModal');
-            var iframe = document.getElementById('modalFrame');
+        // function closeBook() {
+        //     var modal = document.getElementById('bookModal');
+        //     var iframe = document.getElementById('modalFrame');
     
-            if (modal && iframe) {
-                modal.style.display = 'none';
-                iframe.src = '';
-                document.body.style.overflow = 'auto';
-            }
-        }
+        //     if (modal && iframe) {
+        //         modal.style.display = 'none';
+        //         iframe.src = '';
+        //         document.body.style.overflow = 'auto';
+        //     }
+        // }
+
+        // Tambahkan Fungsi Ini di JavaScript Anda
+function bukaBuku(url, judul) {
+    document.getElementById('readingFrame').src = url;
+    document.getElementById('readingTitle').innerText = judul;
+    document.getElementById('readingArea').style.display = 'block';
+    document.body.style.overflow = 'hidden'; // Kunci scroll latar belakang
+}
+
+function tutupBuku() {
+    document.getElementById('readingArea').style.display = 'none';
+    document.getElementById('readingFrame').src = '';
+    document.body.style.overflow = 'auto'; // Aktifkan kembali scroll
+}
+        
          // 1. JALANKAN OTOMATIS: Tampilkan semua buku saat halaman pertama kali dibuka
         document.addEventListener('DOMContentLoaded', () => {
             muatBuku(); 
