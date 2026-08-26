@@ -34,10 +34,9 @@
     <!-- <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe> -->
 
     <!-- Tambahkan Kontainer Membaca Ini di HTML Anda -->
-<div id="readingArea" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; z-index: 9999;">
-    <div style="padding: 10px; background: #1e293b; display: flex; align-items: center;">
-        <button onclick="tutupBuku()" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">⬅ Kembali ke Katalog</button>
-        <span id="readingTitle" style="color: white; margin-left: 20px; font-weight: bold;">Judul Buku</span>
+<div class="reader-header">
+        <button onclick="tutupBuku()" class="btn-back">⬅ Kembali ke Katalog</button>
+        <span id="readingTitle" style="color: blue; margin-left: 20px; font-weight: bold;">Judul Buku</span>
     </div>
     <iframe id="readingFrame" src="" style="width: 100%; height: calc(100vh - 50px); border: none;"></iframe>
 </div>
