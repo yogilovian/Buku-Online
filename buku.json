@@ -2,12 +2,12 @@
 [
     {
         "title": "KL.104 I DO.9 2024",
-        "author": "PT Kereta Api Indonesia",
+        "author": "Daerah Operasi 9",
         "cover": "gambar/buku1.jpg",
         "link": "Bank_Buku/KL.104_I_DO.9_2024.pdf"
     },
     {
-        "title": "PD 19 Jilid I",
+        "title": "PD 19 Jilid I Perka & Lagsir",
         "author": "PT Kereta Api Indonesia",
         "cover": "gambar/buku2.jpg",
         "link": "Bank_Buku/PD 19 Jilid I Urusan Perka & Langsir.pdf"
@@ -17,5 +17,5 @@
         "author": "PT Kereta Api Indonesia",
         "cover": "gambar/buku2.jpg",
         "link": "Bank_Buku/PD 13 A Persinyalan (P&T).pdf"
-    }
+    },
 ]
