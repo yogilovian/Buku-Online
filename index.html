@@ -315,6 +315,28 @@
                 statusMessage.innerText = 'Terjadi kesalahan sistem saat mengambil data.';
             }
         });
+        // Hapus fungsi openBook yang lama, ganti dengan ini:
+        function openBook(pdfUrl) {
+            var modal = document.getElementById('bookModal');
+            var iframe = document.getElementById('modalFrame');
+    
+            if (modal && iframe) {
+                iframe.src = pdfUrl;
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeBook() {
+            var modal = document.getElementById('bookModal');
+            var iframe = document.getElementById('modalFrame');
+    
+            if (modal && iframe) {
+                modal.style.display = 'none';
+                iframe.src = '';
+                document.body.style.overflow = 'auto';
+            }
+        }
     </script>
 <!-- <div id="bookModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:2000; align-items:center; justify-content:center;">
     <div style="background:white; width:95%; max-width:1100px; height:90%; margin:2% auto; border-radius:12px; display:flex; flex-direction:column; overflow:hidden; position:relative;">
