@@ -25,13 +25,23 @@
 </head>
 <body>
 
-    <div class="reader-header">
+    <!-- <div class="reader-header">
         <a href="index.html" class="btn-back">⬅ Kembali</a>
         <span style="font-weight: bold; color: #1e293b;">KAI BOOK READER</span>
-    </div>
+    </div> -->
 
     <!-- Tempat menampilkan PDF buku -->
-    <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe>
+    <!-- <iframe id="pdfFrame" class="pdf-viewer" src=""></iframe> -->
+
+    <!-- Tambahkan Kontainer Membaca Ini di HTML Anda -->
+<div id="readingArea" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #ffffff; z-index: 9999;">
+    <div style="padding: 10px; background: #1e293b; display: flex; align-items: center;">
+        <button onclick="tutupBuku()" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">⬅ Kembali ke Katalog</button>
+        <span id="readingTitle" style="color: white; margin-left: 20px; font-weight: bold;">Judul Buku</span>
+    </div>
+    <iframe id="readingFrame" src="" style="width: 100%; height: calc(100vh - 50px); border: none;"></iframe>
+</div>
+
 
     <script>
         // Mengambil parameter URL file PDF (contoh: baca.html?file=pdf/pd3a.pdf)
