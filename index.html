@@ -283,13 +283,12 @@
                 //     return buku.title.toLowerCase().includes(query) || 
                 //            buku.author.toLowerCase().includes(query);
                 // Jika kataKunci kosong, tampilkan semua buku. Jika ada, filter datanya.
-                const hasilFilter = kataKunci === '' 
-                    dataBuku 
-                    : dataBuku.filter(buku => 
-                        buku.title.toLowerCase().includes(kataKunci)
-                        buku.author.toLowerCase().includes(kataKunci)
-                      );
-                });
+            const hasilFilter = kataKunci === '' 
+                ? dataBuku.slice(0, BATAS_HALAMAN_UTAMA) // Jika kosong, potong sesuai batas halaman utama
+                : dataBuku.filter(buku => 
+                    buku.title.toLowerCase().includes(kataKunci) || // Ditambahkan operator ||
+                    buku.author.toLowerCase().includes(kataKunci)
+                  );
 
                 // Cek jika tidak ada buku yang cocok
                 if (hasilFilter.length === 0) {
