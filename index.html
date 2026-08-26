@@ -353,18 +353,48 @@
         //     }
         // }
 
-        // Tambahkan Fungsi Ini di JavaScript Anda
+       // Fungsi untuk membuka mode layar penuh dengan transisi halus
 function bukaBuku(url, judul) {
-    document.getElementById('readingFrame').src = url;
-    document.getElementById('readingTitle').innerText = judul;
-    document.getElementById('readingArea').style.display = 'block';
-    document.body.style.overflow = 'hidden'; // Kunci scroll latar belakang
+    if (url === '#') {
+        alert('Maaf, tautan membaca untuk buku ini belum tersedia.');
+        return;
+    }
+
+    const areaMembaca = document.getElementById('readingArea');
+    const frameMembaca = document.getElementById('readingFrame');
+    const judulMembaca = document.getElementById('readingTitle');
+
+    judulMembaca.innerText = judul;
+    frameMembaca.src = url;
+
+    // Aktifkan display flex terlebih dahulu
+    areaMembaca.style.display = 'flex';
+    
+    // Beri jeda 10ms agar efek transisi opacity berjalan mulus
+    setTimeout(() => {
+        areaMembaca.classList.add('aktif');
+    }, 10);
+
+    // Kunci scroll halaman utama di latar belakang
+    document.body.style.overflow = 'hidden';
 }
 
+// Fungsi untuk menutup mode layar penuh dan kembali ke katalog
 function tutupBuku() {
-    document.getElementById('readingArea').style.display = 'none';
-    document.getElementById('readingFrame').src = '';
-    document.body.style.overflow = 'auto'; // Aktifkan kembali scroll
+    const areaMembaca = document.getElementById('readingArea');
+    const frameMembaca = document.getElementById('readingFrame');
+
+    // Hilangkan kelas aktif untuk memicu efek memudar (fade-out)
+    areaMembaca.classList.remove('aktif');
+
+    // Tunggu animasi memudar selesai (400ms) sebelum menyembunyikan elemen & menghapus isi iframe
+    setTimeout(() => {
+        areaMembaca.style.display = 'none';
+        frameMembaca.src = ''; // Menghentikan proses loading/suara dari buku sebelumnya
+    }, 400);
+
+    // Aktifkan kembali scroll pada halaman utama
+    document.body.style.overflow = 'auto';
 }
         
          // 1. JALANKAN OTOMATIS: Tampilkan semua buku saat halaman pertama kali dibuka
